@@ -14,7 +14,7 @@ import java.util.Date;
 public class DistanceInfo
 {
     @EmbeddedId
-    private DistanceInfo distancePK;
+    private DistanceInfoPK distancePK;
 
     @Column(name = "NSHIFT_NO")
     private Integer shiftNumber;

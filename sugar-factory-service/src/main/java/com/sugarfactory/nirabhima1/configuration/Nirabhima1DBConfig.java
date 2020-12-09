@@ -19,15 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/*@Configuration
-@EnableTransactionManagement
+@Configuration
+/*@EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "nirabhima1EntityManagerFactory",
         transactionManagerRef = "nirabhima1TransactionManager"
 )*/
 public class Nirabhima1DBConfig {
-
-    /*// Datasource method goes here
+/*
+    // Datasource method goes here
     @Primary
     @Bean(name="datasource")
     @ConfigurationProperties(prefix = "spring.nirabhima1.datasource")
@@ -45,7 +45,7 @@ public class Nirabhima1DBConfig {
     {
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", "update");
-        properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialects");
+        //properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialects");
         return builder
                 .dataSource(dataSource)
                 .properties(properties)

@@ -17,4 +17,6 @@ public interface DistanceRepository extends JpaRepository<DistanceInfo, Distance
     @Modifying
     @Query("Update DistanceInfo d SET d.actualDistance =:actualDistance, d.status =:status  WHERE d.distancePK=:distancePK ")
     public void updateDistance(@Param("distancePK") DistanceInfoPK distancePK, @Param("actualDistance") int actualDistance, @Param("status") String status);
+
+    DistanceInfo getDistanceBySlipNum(int slipNum);
 }

@@ -1,14 +1,14 @@
 package com.sugarfactory.nirabhima1.controller;
 
+import com.sugarfactory.nirabhima1.handler.RecordNotFoundException;
 import com.sugarfactory.nirabhima1.model.DistanceInfo;
 import com.sugarfactory.nirabhima1.model.DistanceInfoPK;
 import com.sugarfactory.nirabhima1.repository.DistanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,15 +25,29 @@ public class DistanceController {
         return "hello";
     }
 
-    @GetMapping("/getSlipData")
-    public String getSlipData() {
+    @GetMapping(value = "/getSlipDistance/{slipNum}")
+    public ResponseEntity<DistanceInfo> getEmployeeById (@PathVariable("slipNum") int slipNum)
+    {/*
+        DistanceInfo distanceInfo = distanceRepository.getDistanceBySlipNum(slipNum);
+
+        if(distanceInfo == null) {
+            throw new RecordNotFoundException("Invalid slip number : " + slipNum);
+        }
+        return new ResponseEntity<DistanceInfo>(distanceInfo, HttpStatus.OK);
+    */
+        return null;
+    }
+
+    @GetMapping("/getAllSlipDistanceData")
+    public List<DistanceInfo> getSlipData() {
 
         //List<DistanceInfo> list = distanceRepository.findAll();
-        return "list";
+        //return list;
+        return null;
     }
 
     @PostMapping("/postSlipDistance")
-    public String postSlipDistance(String year, int slipNum , int distance) {
+        public String postSlipDistance(String year, int slipNum , int distance) {
 
         //DistanceInfoPK distanceInfoPK = new DistanceInfoPK(year.trim(), slipNum);
         //distanceRepository.updateDistance(distanceInfoPK , distance , "DONE" );
