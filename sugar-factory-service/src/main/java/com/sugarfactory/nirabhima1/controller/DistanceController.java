@@ -17,8 +17,8 @@ import java.util.Optional;
 @RequestMapping("/nirabhima")
 public class DistanceController {
 
-    //@Autowired
-    //private DistanceRepository distanceRepository;
+    @Autowired
+    private DistanceRepository distanceRepository;
 
     @GetMapping("/test")
     public String test() {
@@ -27,30 +27,33 @@ public class DistanceController {
 
     @GetMapping(value = "/getSlipDistance/{slipNum}")
     public ResponseEntity<DistanceInfo> getEmployeeById (@PathVariable("slipNum") int slipNum)
-    {/*
+    {
         DistanceInfo distanceInfo = distanceRepository.getDistanceBySlipNum(slipNum);
 
         if(distanceInfo == null) {
             throw new RecordNotFoundException("Invalid slip number : " + slipNum);
         }
         return new ResponseEntity<DistanceInfo>(distanceInfo, HttpStatus.OK);
-    */
-        return null;
     }
 
     @GetMapping("/getAllSlipDistanceData")
     public List<DistanceInfo> getSlipData() {
 
-        //List<DistanceInfo> list = distanceRepository.findAll();
-        //return list;
-        return null;
+        List<DistanceInfo> list = distanceRepository.findAll();
+        return list;
     }
 
-    @PostMapping("/postSlipDistance")
-        public String postSlipDistance(String year, int slipNum , int distance) {
+    @PostMapping("/postSlipDistance/{year}/{slipNum}/{distance}")
+        public String postSlipDistance(@PathVariable String year,@PathVariable int slipNum ,@PathVariable int distance) {
 
-        //DistanceInfoPK distanceInfoPK = new DistanceInfoPK(year.trim(), slipNum);
-        //distanceRepository.updateDistance(distanceInfoPK , distance , "DONE" );
+        DistanceInfoPK distanceInfoPK = new DistanceInfoPK(year.trim(), slipNum);
+
+        Optional<DistanceInfo> distanceInfo = distanceRepository.findById(distanceInfoPK);
+
+        if(!distanceInfo.isPresent()) {
+            throw new RecordNotFoundException("Invalid slip number : " + slipNum);
+        }
+        distanceRepository.updateDistance(distanceInfoPK , distance , "DONE" );
 
         return "Slip number "+ slipNum +" is updated with distance "+ distance;
     }
