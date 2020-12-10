@@ -1,9 +1,9 @@
-package com.sugarfactory.nirabhima1.controller;
+package com.sugarfactory.controller;
 
-import com.sugarfactory.nirabhima1.handler.RecordNotFoundException;
-import com.sugarfactory.nirabhima1.model.DistanceInfo;
-import com.sugarfactory.nirabhima1.model.DistanceInfoPK;
-import com.sugarfactory.nirabhima1.repository.DistanceRepository;
+import com.sugarfactory.handler.RecordNotFoundException;
+import com.sugarfactory.model.DistanceInfo;
+import com.sugarfactory.model.DistanceInfoPK;
+import com.sugarfactory.repository.DistanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/nirabhima")
 public class DistanceController {
 
-    @Autowired
+    //@Autowired
     private DistanceRepository distanceRepository;
 
     @GetMapping("/test")

@@ -1,9 +1,9 @@
-package com.sugarfactory.nirabhima1.handler;
+package com.sugarfactory.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sugarfactory.nirabhima1.model.ErrorResponse;
+import com.sugarfactory.model.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

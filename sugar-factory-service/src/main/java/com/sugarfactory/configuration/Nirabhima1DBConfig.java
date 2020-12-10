@@ -1,4 +1,4 @@
-package com.sugarfactory.nirabhima1.configuration;
+package com.sugarfactory.configuration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,24 +20,24 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
-/*@EnableTransactionManagement
-@EnableJpaRepositories(
-        entityManagerFactoryRef = "nirabhima1EntityManagerFactory",
-        transactionManagerRef = "nirabhima1TransactionManager"
-)*/
+@EnableTransactionManagement
+@EnableJpaRepositories(basePackages="com.sugarfactory.repository",
+        entityManagerFactoryRef = "entityManagerFactory",
+        transactionManagerRef = "transactionManager"
+)
 public class Nirabhima1DBConfig {
-/*
+
     // Datasource method goes here
     @Primary
     @Bean(name="datasource")
-    @ConfigurationProperties(prefix = "spring.nirabhima1.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource(){
         return DataSourceBuilder.create().build();
     }
 
     // LocalContainerEntityManagerFactoryBean goes here
     @Primary
-    @Bean(name="nirabhima1TransactionManager")
+    @Bean(name="entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(
             EntityManagerFactoryBuilder builder,
             @Qualifier("datasource") DataSource dataSource
@@ -45,22 +45,22 @@ public class Nirabhima1DBConfig {
     {
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", "update");
-        //properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialects");
+        //properties.put("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
         return builder
                 .dataSource(dataSource)
                 .properties(properties)
-                .packages("com.sugarfactory.nirabhima1.model")
+                .packages("com.sugarfactory.model")
                 .persistenceUnit("DistanceInfo")
                 .build();
     }
 
     // PlatformTransactionManager goes here
     @Primary
-    @Bean(name="nirabhima1TransactionManager")
+    @Bean(name="transactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory
     )
     {
         return new JpaTransactionManager(entityManagerFactory);
-    }*/
+    }
 }

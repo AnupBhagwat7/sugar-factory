@@ -1,4 +1,4 @@
-package com.sugarfactory.nirabhima1.model;
+package com.sugarfactory.model;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;

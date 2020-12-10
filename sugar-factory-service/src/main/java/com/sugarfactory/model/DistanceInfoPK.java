@@ -1,4 +1,4 @@
-package com.sugarfactory.nirabhima1.model;
+package com.sugarfactory.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

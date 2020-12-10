@@ -1,9 +1,9 @@
-package com.sugarfactory.nirabhima1.repository;
+package com.sugarfactory.repository;
 
-import com.sugarfactory.nirabhima1.model.DistanceInfo;
-import com.sugarfactory.nirabhima1.model.DistanceInfoPK;
+import com.sugarfactory.model.DistanceInfo;
+import com.sugarfactory.model.DistanceInfoPK;
 import org.springframework.context.annotation.Profile;
-        import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

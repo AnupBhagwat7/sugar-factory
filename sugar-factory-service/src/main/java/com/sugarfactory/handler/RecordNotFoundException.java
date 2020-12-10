@@ -1,4 +1,4 @@
-package com.sugarfactory.nirabhima1.handler;
+package com.sugarfactory.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
