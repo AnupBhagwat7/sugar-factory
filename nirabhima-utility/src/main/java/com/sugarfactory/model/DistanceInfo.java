@@ -14,12 +14,9 @@ import java.util.Date;
 @Table(name="COM_WEIGHT_SLIP_DIST")
 public class DistanceInfo
 {
-    //@EmbeddedId
-    //private DistanceInfoPK distancePK;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "slip_dist_seq")
-    @SequenceGenerator(name="slip_dist_seq",allocationSize=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "slip_dist_generator")
+    @SequenceGenerator(name="slip_dist_generator",sequenceName = "slip_dist_seq", allocationSize=50)
     private Long id;
 
     @Column(name = "VYEAR_CODE")

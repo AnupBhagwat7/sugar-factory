@@ -1,6 +1,5 @@
 package com.sugarfactory.controller;
 
-import com.sugarfactory.filter.RequestAndResponseLoggingFilter;
 import com.sugarfactory.handler.RecordNotFoundException;
 import com.sugarfactory.model.DistanceInfo;
 import com.sugarfactory.repository.DistanceRepository;
@@ -51,11 +50,8 @@ public class DistanceController {
     }
 
     @PutMapping("/updateSlipDistance/{slipNo}/{distance}")
-        public String updateSlipDistance(@PathVariable Integer slipNo ,@PathVariable Integer distance) {
+        public String updateSlipDistance(@PathVariable Integer slipNo , @PathVariable Integer distance) {
 
-        //DistanceInfoPK distanceInfoPK = new DistanceInfoPK(year.trim(), slipNum);
-
-        //Optional<DistanceInfo> distanceInfo = distanceRepository.findById(distanceInfoPK);
         DistanceInfo distanceInfo = distanceRepository.findBySlipNo(slipNo);
 
         if(distanceInfo != null) {

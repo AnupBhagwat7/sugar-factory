@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
+//@Profile("admissions")
 public interface DistanceRepository extends JpaRepository<DistanceInfo, Long> {
 
 
