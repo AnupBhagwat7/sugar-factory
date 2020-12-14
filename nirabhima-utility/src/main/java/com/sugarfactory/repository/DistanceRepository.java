@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 public interface DistanceRepository extends JpaRepository<DistanceInfo, Long> {
 
 
-    @Modifying
-    @Query("Update DistanceInfo d SET d.actualDistance =:actualDistance, d.status =:status  WHERE d.slipNo=:slipNo ")
-    public void updateDistance(@Param("slipNo") Integer slipNo, @Param("actualDistance") int actualDistance, @Param("status") String status);
+	@Modifying
+    @Query("Update DistanceInfo d SET d.actualDistance =:actualDistance, d.status =:status  WHERE d.id=:id ")
+    public void updateDistance(@Param("id") Long id, @Param("actualDistance") Integer actualDistance, @Param("status") String status);
 
     DistanceInfo findBySlipNo(Integer slipNo);
 }

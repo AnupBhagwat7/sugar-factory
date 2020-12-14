@@ -15,8 +15,8 @@ import java.util.Date;
 public class DistanceInfo
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "slip_dist_generator")
-    @SequenceGenerator(name="slip_dist_generator",sequenceName = "slip_dist_seq", allocationSize=50)
+    @SequenceGenerator(name="slip_dist_generator",sequenceName = "slip_dist_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "slip_dist_generator")
     private Long id;
 
     @Column(name = "VYEAR_CODE")
@@ -48,7 +48,7 @@ public class DistanceInfo
     @Column(name = "DCREATE_DATE")
     private Date createDate;
     @Column(name = "DUPDATE_DATE")
-    private Date udateDate;
+    private Date updateDate;
     @Column(name = "NDISTANCEACTUAL")
     private Integer actualDistance;
     @Column(name ="NSTATUS")
@@ -72,7 +72,7 @@ public class DistanceInfo
                 ", bulluckcartCode=" + bulluckcartCode +
                 ", bulluckcartMainCode=" + bulluckcartMainCode +
                 ", createDate=" + createDate +
-                ", udateDate=" + udateDate +
+                ", updateDate=" + updateDate +
                 ", actualDistance=" + actualDistance +
                 ", status='" + status + '\'' +
                 '}';

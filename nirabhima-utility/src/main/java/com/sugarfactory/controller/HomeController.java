@@ -1,25 +1,27 @@
 package com.sugarfactory.controller;
 
-import com.sugarfactory.handler.RecordNotFoundException;
-import com.sugarfactory.model.DistanceInfo;
-import com.sugarfactory.repository.DistanceRepository;
-import com.sugarfactory.service.DistanceService;
+import java.sql.Timestamp;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.sugarfactory.model.DistanceInfo;
+import com.sugarfactory.repository.DistanceRepository;
+import com.sugarfactory.service.DistanceService;
 
 
 @Controller
-@RequestMapping("/nirabhima")
 public class HomeController {
 
     @Autowired
@@ -37,42 +39,55 @@ public class HomeController {
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
         model.addAttribute("distanceInfo", null);
+        model.addAttribute("message", "");
+        model.addAttribute("distError", "");
         return "home";
     }
 
     @GetMapping(value = "/getSlipDistance")
-    public String getBySlipNumber (@RequestParam(value = "slipNo", required = false) Integer slipNo, Model model)
+    public String getBySlipNumber (@RequestParam(value = "slipNumber", required = false) Integer slipNumber, Model model)
     {
-        //DistanceInfo distanceInfo = null;
-        DistanceInfo distanceInfo = distanceService.getBySlipNumber(slipNo);
+        DistanceInfo distanceInfo = distanceService.getBySlipNumber(slipNumber);
 
         if(distanceInfo == null) {
-            log.debug("Invalid slip number : " + slipNo);
-            throw new RecordNotFoundException("Invalid slip number : " + slipNo);
+            log.debug("Invalid slip number : " + slipNumber);
+            model.addAttribute("message", "Please enter a valid slip number and then search again");
+            return "redirect:/";
+            //throw new RecordNotFoundException("Invalid slip number : " + slipNo);
         }
 
+        log.debug("Distance details fetched are : " + distanceInfo);
         model.addAttribute("distanceInfo", distanceInfo);
-        log.debug("Slip number : " + slipNo + " details fetched successfully ");
-        return "update-distance";
+        log.debug("Slip number : " + slipNumber + " details fetched successfully ");
+        return "home";
     }
 
-    @PostMapping("/updateDistance/{id}")
-    public String updateDistance(@PathVariable("id") long id, DistanceInfo distanceInfo,
-                             BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            distanceInfo.setActualDistance(distanceInfo.getActualDistance());
-            return "update-distance";
+    @PostMapping("/updateSlipDistance")
+    public String updateDistance( @Valid DistanceInfo distanceInfo,
+                                  BindingResult result,
+                                  Model model) {
+        
+        Optional<DistanceInfo> distanceInfo1 = distanceRepository.findById(distanceInfo.getId());
+        if (distanceInfo1.get().getDistance() < distanceInfo.getActualDistance()) {
+        	log.debug("Actual distance : "+ distanceInfo.getActualDistance() +" factory distance: "+ distanceInfo1.get().getDistance());
+        	model.addAttribute("distError", "Actual distance should be less than or equal to factory distance");
+        	return "home";
+        }
+        
+        log.debug("Before updating distanceInfo object values are: "+ distanceInfo);
+
+        if(distanceInfo != null){
+            DistanceInfo distanceInfo2 = distanceInfo1.get();
+            distanceInfo2.setActualDistance(distanceInfo.getActualDistance());
+            distanceInfo2.setStatus("DONE");
+            distanceInfo2.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+            distanceRepository.save(distanceInfo2);
+            model.addAttribute("distanceInfo", distanceInfo2);
+            model.addAttribute("message", "Distance updated successfully!!!");
+            log.debug("Slip number : "+ distanceInfo2.getSlipNo() +" is updated with distance : "+ distanceInfo2.getActualDistance());
         }
 
-        distanceRepository.save(distanceInfo);
-        model.addAttribute("users", distanceRepository.findAll());
-        return "redirect:/index";
-    }
-
-    @RequestMapping(path = "/updateDistance", method = RequestMethod.POST)
-    public String updateDistance(@PathVariable Integer slipNo, @PathVariable Integer distance)
-    {
-        distanceService.updateDistance(slipNo , distance);
         return "redirect:/";
     }
+
 }

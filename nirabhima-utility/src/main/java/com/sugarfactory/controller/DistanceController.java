@@ -55,7 +55,7 @@ public class DistanceController {
         DistanceInfo distanceInfo = distanceRepository.findBySlipNo(slipNo);
 
         if(distanceInfo != null) {
-            distanceRepository.updateDistance(slipNo , distance , "DONE" );
+            distanceRepository.updateDistance(distanceInfo.getId() , distance , "DONE" );
             log.debug("Slip number : "+ slipNo +" is updated with distance : "+ distance);
             return "Slip number : "+ slipNo +" is updated with distance : "+ distance;
         }else{
