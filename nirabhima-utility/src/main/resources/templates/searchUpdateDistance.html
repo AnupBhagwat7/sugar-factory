@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Update Slip distance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+
+    <script>
+        function validateForm() {
+            var actuDistance = document.getElementById("actualDistance").value;  //document.forms["updateForm"]["distance"].value;
+            var factDistance = document.getElementById("distance").value;  //document.forms["updateForm"]["distance"].value;
+            
+            console.log(actuDistance +"  "+ factDistance);
+            if (factDistance > actuDistance) {
+                alert("Actual distance should be less than or equal to factory distance");
+                return false;
+            }
+        }
+    </script>
+    
+</head>
+
+<body>
+<!-- <h3 align="center">Welcome to <span>Nirabhima Data Entry Utility</span></h3> -->
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Nirabhima  Utility</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+         <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/searchUpdateDistance">Update Distance
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/distanceInfo">Distance Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- <div class="container">
+
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs mt-5" id="myTabs">
+                <li class="nav-item"><a href="#tab1" data-url="/distanceInfo" class="nav-link active">Distance Info</a></li>
+                <li class="nav-item"><a href="#tab2" data-url="/searchUpdateDistance" class="nav-link">Update Distance</a></li>
+            </ul>
+
+            <div class="tab-content pt-3">
+                <div class="tab-pane active" id="tab1">Active panel</div>
+                <div class="tab-pane" id="tab2"></div>
+            </div>
+        </div>
+    </div>
+
+</div> -->
+
+<div class="container my-5">
+
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <h3>Search slip</h3><br/>
+
+                <form th:action="@{/getSlipDistance}" name="searchform">
+                    <div class="form-group col-md-8">
+                        <label for="slipNumber" class="col-form-label">Slip number:</label>
+                        <input type="number" id="slipNumber" th:name="slipNumber" required/>
+                    </div>
+                    <div class="col-md-6">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5" th:if=${distanceInfo}>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+				
+                <form action="#" th:action="@{/updateSlipDistance}" th:object="${distanceInfo}"
+                      method="post" name="updateForm" >
+                    <h3>Update Slip Distance Form</h3><br/>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="slipNo" class="col-form-label">Slip Number</label>
+                            <input th:disabled="true" type="number" th:field="*{slipNo}" class="form-control"
+                                   id="slipNo" placeholder="Slip Number" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="transporterCode" class="col-form-label">Transporter Code</label>
+                            <input th:disabled="true" type="number" th:field="*{transporterCode}" class="form-control"
+                                   id="transporterCode" placeholder="Transporter Code" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="transporterCode" class="col-form-label">Bulluckcart Code</label>
+                            <input th:disabled="true" type="number" th:field="*{bulluckcartCode}" class="form-control"
+                                   id="bulluckcartCode" placeholder="Bulluckcart Code" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="distance" class="col-form-label">Factory Distance</label>
+                            <input th:disabled="true" type="number" th:field="*{distance}" class="form-control"
+                                   id="distance" placeholder="Factory Distance" />
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            <label for="actualDistance" class="col-form-label">Actual Distance</label>
+                            <input type="number" th:field="*{actualDistance}" class="form-control"
+                                   id="c" placeholder="Actual Distance" required/>
+                        </div>
+
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{yearCode}"/>
+                        <input type="hidden" th:field="*{shiftNumber}"/>
+                        <input type="hidden" th:field="*{slipDate}"/>
+                        <input type="hidden" th:field="*{plotNumber}"/>
+                        <input type="hidden" th:field="*{token}"/>
+                        <input type="hidden" th:field="*{vehicleType}"/>
+                        <input type="hidden" th:field="*{harvestorCode}"/>
+                        <input type="hidden" th:field="*{transporterCode}"/>
+                        <input type="hidden" th:field="*{vehicleNumber}"/>
+                        <input type="hidden" th:field="*{bulluckcartCode}"/>
+                        <input type="hidden" th:field="*{bulluckcartMainCode}"/>
+                        <input type="hidden" th:field="*{createDate}"/>
+                        <input type="hidden" th:field="*{updateDate}"/>
+                        <input type="hidden" th:field="*{status}"/>
+
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-primary" value=" Update " onclick="validateForm()">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<script>
+    $('#myTabs a').click(function (e) {
+        e.preventDefault();
+
+        var url = $(this).attr("data-url");
+        var href = this.hash;
+        var pane = $(this);
+
+        // ajax load from data-url
+        $(href).load(url, function (result) {
+            pane.tab('show');
+        });
+    });
+
+    // load first tab content
+    $('#tab1').load($('.nav-link.active').attr("data-url"), function (result) {
+    });
+</script> -->
+
+</body>
+
+</html>
