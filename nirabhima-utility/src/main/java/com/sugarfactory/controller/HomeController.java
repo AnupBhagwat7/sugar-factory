@@ -1,17 +1,12 @@
 package com.sugarfactory.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +14,11 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -37,10 +30,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder;
 import com.google.gson.Gson;
+import com.jayway.jsonpath.JsonPath;
 import com.sugarfactory.model.DistanceInfo;
 import com.sugarfactory.repository.DistanceRepository;
 import com.sugarfactory.service.DistanceService;
@@ -109,10 +107,7 @@ public class HomeController {
         return "searchUpdateDistance";
     }
 
-    @GetMapping(
-    		  value = "/getSlipDistanceData",
-    		  produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
-    		)
+    @GetMapping(value = "/getSlipDistanceData")
     public ResponseEntity<Resource> getFile(@RequestParam(value = "fromDate", required = false) String fromDate, 
     		@RequestParam(value = "toDate", required = false) String toDate) throws IOException {
     	
@@ -128,24 +123,40 @@ public class HomeController {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(json.getBytes());
         fos.close();
+        
+        //Create CSV
+        JsonNode jsonTree = new ObjectMapper().readTree(file);
+        
+        Builder csvSchemaBuilder = CsvSchema.builder();
+        JsonNode firstObject = jsonTree.elements().next();
+        firstObject.fieldNames().forEachRemaining(fieldName -> {csvSchemaBuilder.addColumn(fieldName);} );
+        CsvSchema csvSchema = csvSchemaBuilder.build().withHeader();
+        
+        File csvfile = new File("slipdistanceData.csv");
+        CsvMapper csvMapper = new CsvMapper();
+        csvMapper.writerFor(JsonNode.class)
+          .with(csvSchema)
+          .writeValue(csvfile, jsonTree);
+        //
+
         //FileInputStream fis = new FileInputStream(file);
         //fis.read();
         //return IOUtils.toByteArray(in);
         HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.json");
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=slipdistanceData.csv");
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
         header.add("Pragma", "no-cache");
         header.add("Expires", "0");
 
-        Path path = Paths.get(file.getAbsolutePath());
+        Path path = Paths.get(csvfile.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
         
         //InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()
                 .headers(header)
-                .contentLength(file.length())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(csvfile.length())
+                .contentType(MediaType.parseMediaType("application/csv"))
                 .body(resource);
     	
     }
